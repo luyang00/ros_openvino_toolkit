@@ -1,6 +1,6 @@
 Pipelines:
 - name: people
-  inputs: [RealSenseCamera]
+  inputs: [StandardCamera]
   infers:
     - name: face_detection
       model: /home/intel/code/open_model_zoo/model_downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/face-detection-adas-0001.xml
