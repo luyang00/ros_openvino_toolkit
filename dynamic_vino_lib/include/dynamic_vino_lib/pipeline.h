@@ -147,6 +147,10 @@ class Pipeline
     return params_->findFilterConditions(input, output);
   }
 
+  void close() const
+  {
+    input_device_->close();
+  }
  private:
   void initInferenceCounter();
   void increaseInferenceCounter();
@@ -167,8 +171,8 @@ class Pipeline
   int total_inference_ = 0;
   std::shared_ptr<PipelineParams> params_;
 
-  std::shared_ptr<Input::BaseInputDevice> input_device_;
   std::string input_device_name_;
+  std::shared_ptr<Input::BaseInputDevice> input_device_;
   std::multimap<std::string, std::string> next_;
   std::map<std::string, std::shared_ptr<dynamic_vino_lib::BaseInference>>
       name_to_detection_map_;

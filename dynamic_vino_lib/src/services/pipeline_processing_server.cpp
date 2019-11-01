@@ -87,6 +87,36 @@ void PipelineProcessingServer<T>::setPipelineByRequest(std::string pipeline_name
 }
 
 template<typename T>
+void PipelineProcessingServer<T>::runPipelineFromService(std::string pipeline_desc){
+
+    PipelineManager::getInstance().stopAll();
+   
+    Params::ParamManager::getInstance().reset();
+    
+    //std::cout << "!!!!\n" <<  pipeline_desc << "!!!!\n"<<std::endl;  
+    Params::ParamManager::getInstance().parseFromText(pipeline_desc);
+   
+    Params::ParamManager::getInstance().print();
+    
+    
+    auto pcommon = Params::ParamManager::getInstance().getCommon();
+    auto pipelines = Params::ParamManager::getInstance().getPipelines();
+    if (pipelines.size() < 1)
+    {
+      throw std::logic_error("Pipeline parameters should be set!");
+    }
+
+    for (auto & p : pipelines) {
+      PipelineManager::getInstance().createPipeline(p);
+    }
+
+    PipelineManager::getInstance().runAll();
+  
+
+
+}
+
+template<typename T>
 bool PipelineProcessingServer<T>::cbService(
   ros::ServiceEvent<typename T::Request,typename T::Response>& event) 
 {
@@ -98,10 +128,10 @@ bool PipelineProcessingServer<T>::cbService(
   PipelineManager::PipelineState state;
   if( req_cmd !=  "GET_PIPELINE")//not only get pipeline but also set pipeline by request
   {
-    if(req_cmd == "STOP_PIPELINE") state = PipelineManager::PipelineState_ThreadStopped;
+    if(req_cmd == "STOP_PIPELINE") state = PipelineManager::PipelineState_ThreadStopping;
     else if(req_cmd == "RUN_PIPELINE") state = PipelineManager::PipelineState_ThreadRunning;
     else if(req_cmd == "PAUSE_PIPELINE") state =  PipelineManager::PipelineState_ThreadPasued;
-
+    else if(req_cmd == "RUN_PIPELINE_FROM_SERVICE") runPipelineFromService(req_val);
     setPipelineByRequest(req_val,state);
   }
   else  //fill in pipeline status into service response

@@ -35,6 +35,10 @@ namespace Input
 class RealSenseCamera : public BaseInputDevice
 {
  public:
+   /**
+   * @brief release resources of device to avoid conflict
+   */
+  // ~RealSenseCamera();
   /**
    * @brief Initialize the input device, turn the
    * camera on and get ready to read frames.
@@ -61,7 +65,7 @@ class RealSenseCamera : public BaseInputDevice
    */
   bool read(cv::Mat* frame) override;
   void config() override;
-
+  void close() override;
  private:
   rs2::config cfg_;
   rs2::pipeline pipe_;

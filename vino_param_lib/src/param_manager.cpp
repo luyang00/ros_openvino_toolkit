@@ -239,6 +239,17 @@ void ParamManager::parse(std::string path)
   YAML_PARSE(doc, "Pipelines", pipelines_)
   YAML_PARSE(doc, "Common", common_)
 }
+void ParamManager::parseFromText(std::string pipeline_desc)
+{
+
+  std::istringstream fin(pipeline_desc);
+
+
+  YAML::Node doc = YAML::Load(fin);
+
+  YAML_PARSE(doc, "Pipelines", pipelines_)
+  YAML_PARSE(doc, "Common", common_)
+}
 
 std::vector<std::string> ParamManager::getPipelineNames() const
 {
@@ -263,4 +274,6 @@ ParamManager::PipelineRawData ParamManager::getPipeline(
   }
   throw std::logic_error("No parameters found for pipeline [" + name + "]");
 }
+
+
 } // namespace Params

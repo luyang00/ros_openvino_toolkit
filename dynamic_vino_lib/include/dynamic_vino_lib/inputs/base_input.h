@@ -59,6 +59,7 @@ class BaseInputDevice : public Ros2Handler
   virtual bool read(cv::Mat* frame) = 0;
   virtual void config() = 0;  //< TODO
   virtual ~BaseInputDevice() = default;
+  virtual void close(){};
   /**
    * @brief Get the width of the frame read from input device.
    * @return The width of the frame read from input device.

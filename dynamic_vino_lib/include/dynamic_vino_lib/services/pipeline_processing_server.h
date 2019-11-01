@@ -61,6 +61,9 @@ private:
   
   void setPipelineByRequest(std::string pipeline_name, PipelineManager::PipelineState state);
 
+  
+  void runPipelineFromService(std::string pipeline_desc);
+
   std::shared_ptr<ros::ServiceServer> service_;
 
   std::map<std::string, PipelineManager::PipelineData> *  pipelines_;

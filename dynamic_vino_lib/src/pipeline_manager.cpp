@@ -124,6 +124,7 @@ PipelineManager::parseInputDevice(
 
     if (device != nullptr) {
       device->initialize();
+    
       inputs.insert({name, device});
       slog::info << " ... Adding one Input device: " << name << slog::endl;
     }
@@ -347,15 +348,23 @@ PipelineManager::createPersonReidentification(
 
 void PipelineManager::threadPipeline(const char* name) {
   PipelineData& p = pipelines_[name];
-  while ( p.state != PipelineState_ThreadStopped && p.pipeline != nullptr && ros::ok()) {
+  
+  while ( p.state != PipelineState_ThreadStopping && p.pipeline != nullptr && ros::ok()) {
     
     if(p.state != PipelineState_ThreadPasued)
     {
       ros::spinOnce();
       p.pipeline->runOnce();
     }
-    std::this_thread::sleep_for(std::chrono::milliseconds(1));
+    // std::this_thread::sleep_for(std::chrono::milliseconds(1));
   }
+  //if pipeline has been stopped, then close input devices.
+  p.pipeline->close();
+  std::cout << "clear thread" << std::endl;
+  cv::destroyAllWindows();
+  p.state = PipelineState_ThreadStopped;
+  std::cout << "clear cv windows" << std::endl;
+  
 }
 void PipelineManager::runAll() {
   for (auto it = pipelines_.begin(); it != pipelines_.end(); ++it) {
@@ -374,7 +383,7 @@ void PipelineManager::stopAll()
 {
   for (auto it = pipelines_.begin(); it != pipelines_.end(); ++it) {
     if (it->second.state == PipelineState_ThreadRunning) {
-      it->second.state = PipelineState_ThreadStopped;
+      it->second.state = PipelineState_ThreadStopping;
     }
   }
 
@@ -391,9 +400,11 @@ void PipelineManager::joinAll() {
   auto service_thread = std::make_shared<std::thread>(&PipelineManager::runService,this);
   service_thread->join();// pipeline service
 
-  for (auto it = pipelines_.begin(); it != pipelines_.end(); ++it) {
-    if(it->second.thread != nullptr && it->second.state == PipelineState_ThreadRunning) {
-      it->second.thread->join();
-    }
-  }
+  // for (auto it = pipelines_.begin(); it != pipelines_.end(); ++it) {
+  //   if(it->second.thread != nullptr && it->second.state == PipelineState_ThreadRunning) {
+  //     it->second.thread->join();
+  //   }
+  // }
+  std::cout << "return ??" << std::endl;
+ 
 }

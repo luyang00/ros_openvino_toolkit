@@ -42,7 +42,7 @@ FrameProcessingServer<T>::FrameProcessingServer(
   config_path_(config_path)
 {
   nh_=std::make_shared<ros::NodeHandle>(service_name_);
-  
+  initService();
 }
 
 template<typename T>

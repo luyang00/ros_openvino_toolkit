@@ -22,6 +22,7 @@
 
 #include <ros/package.h>
 #include <ros/ros.h>
+#include <ros/package.h>
 #include "opencv2/opencv.hpp"
 
 #include <object_msgs/DetectObject.h>

@@ -21,16 +21,26 @@
 #include "dynamic_vino_lib/inputs/realsense_camera.h"
 #include "dynamic_vino_lib/slog.h"
 
+int Input::RealSenseCamera::rscamera_count = 0;
+
 // RealSenseCamera
+void Input::RealSenseCamera::close()
+{
+  pipe_.stop();
+  rscamera_count = rscamera_count - 1;
+  std::cout << "!!!!!!!!!!decrease: " << rscamera_count << std::endl;
+}
+
 bool Input::RealSenseCamera::initialize()
 {
-  static int rscamera_count = 0;
+  //static int rscamera_count = 0;
   // Get all devices connected
+  std::cout << "111111111111111111111111111111" << std::endl;
   rs2::context cxt;
   auto device = cxt.query_devices();
   size_t device_count = device.size();
-  slog::info << "Find RealSense num:"<< device_count << slog::endl;
-  auto hardware = device[rscamera_count];
+  slog::info << "Find RealSense num:"<< device_count << "Try to open:"<< rscamera_count << slog::endl;
+  auto hardware = device[0];//device[rscamera_count];
   auto devSerialNumber = hardware.get_info(RS2_CAMERA_INFO_SERIAL_NUMBER);
 	//std::cout << "Camera " << rscamera_count << ": " << hardware.get_info(RS2_CAMERA_INFO_NAME) << std::endl;
 	slog::info << "RealSense Serial number : " << devSerialNumber << slog::endl;
@@ -67,7 +77,8 @@ bool Input::RealSenseCamera::initialize()
 
 bool Input::RealSenseCamera::initialize(size_t width, size_t height)
 {
-  static int rscamera_count = 0;
+   std::cout << "111111111111111111111111111111" << std::endl;
+ // static int rscamera_count = 0;
   if (3 * width != 4 * height)
   {
     slog::err << "The aspect ratio must be 4:3 when using RealSense camera"

@@ -64,7 +64,8 @@ class PipelineManager {
     PipelineState_ThreadStopped = 1,
     PipelineState_ThreadRunning = 2,
     PipelineState_ThreadPasued = 3,
-    PipelineState_Error = 4
+    PipelineState_ThreadStopping = 4,
+    PipelineState_Error = 5
   };
 
   struct PipelineData {

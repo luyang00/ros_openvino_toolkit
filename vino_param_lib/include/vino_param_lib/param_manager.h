@@ -105,6 +105,9 @@ class ParamManager  // singleton
    */
   void parse(std::string path);
 
+
+  void parseFromText(std::string pipeline_desc);
+
   /**
    * @brief Retrieve pipeline names.
    * @return A list of string storing pipelines' names.
@@ -137,6 +140,15 @@ class ParamManager  // singleton
     return common_;
   }
 
+  /**
+   * @brief Reset param manager, clear all params.
+   */
+  void reset()
+  {
+    pipelines_.clear();
+    //To-do clear common_ var
+  }
+  
  private:
   ParamManager()
   {

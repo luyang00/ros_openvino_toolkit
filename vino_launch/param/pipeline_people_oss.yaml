@@ -1,6 +1,6 @@
 Pipelines:
 - name: people
-  inputs: [StandardCamera]
+  inputs: [RealSenseCamera]
   infers:
     - name: FaceDetection
       model: /opt/openvino_toolkit/open_model_zoo/model_downloader/Transportation/object_detection/face/pruned_mobilenet_reduced_ssd_shared_weights/dldt/face-detection-adas-0001.xml
@@ -22,18 +22,18 @@ Pipelines:
       engine: CPU
       label: to/be/set/xxx.labels
       batch: 16
-  outputs: [ImageWindow, RosTopic,RViz]
+  outputs: [ImageWindow, RosTopic]
   confidence_threshold: 0.2
   connects:
-    - left: StandardCamera
+    - left: RealSenseCamera
       right: [FaceDetection]
     - left: FaceDetection
       right: [AgeGenderRecognition, EmotionRecognition, HeadPoseEstimation, ImageWindow, RosTopic, Rviz]
     - left: AgeGenderRecognition
-      right: [ImageWindow, RosTopic,RViz]
+      right: [ImageWindow, RosTopic]
     - left: EmotionRecognition
-      right: [ImageWindow, RosTopic,RViz]
+      right: [ImageWindow, RosTopic]
     - left: HeadPoseEstimation
-      right: [ImageWindow, RosTopic,RViz]
+      right: [ImageWindow, RosTopic]
 
 OpenvinoCommon:

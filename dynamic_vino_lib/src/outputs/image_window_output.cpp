@@ -30,7 +30,6 @@ Outputs::ImageWindowOutput::ImageWindowOutput(const std::string& window_name,
     : window_name_(window_name), focal_length_(focal_length)
 {
 }
-
 void Outputs::ImageWindowOutput::feedFrame(const cv::Mat& frame)
 {
   // frame_ = frame;

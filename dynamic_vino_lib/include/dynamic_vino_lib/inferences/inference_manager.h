@@ -61,10 +61,12 @@ public:
 
   enum PipelineState
   {
-    PipelineState_ThreadNotCreated,
-    PipelineState_ThreadStopped,
-    PipelineState_ThreadRunning,
-    PipelineState_Error
+    PipelineState_ThreadNotCreated = 0,
+    PipelineState_ThreadStopped = 1,
+    PipelineState_ThreadRunning = 2,
+    PipelineState_ThreadPasued = 3,
+    PipelineState_ThreadStopping = 4,
+    PipelineState_Error = 5
   };
   struct PipelineData
   {
